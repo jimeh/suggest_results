@@ -1,6 +1,0 @@
-[
-	{title: "hello", url: "/hello", match: "hello dude"},
-	{title: "world", url: "/world", match: "world dude"},
-	{title: "foo", url: "/foo", match: "foo dude"},
-	{title: "bar", url: "/bar", match: "bar dude"}
-];
