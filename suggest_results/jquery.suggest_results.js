@@ -5,10 +5,17 @@
 		
 		self.init($options);
 		
+		var BACKSPACE = 8;
+		var RETURN = 13;
+		var ESC = 27;
+		var ARRUP = 38;
+		var ARRDN = 40;
+		var SPECIALS_END = 45;
+		
 		return this.each(function(){
 			var $e = $(this);
 			$e.focus(function(){
-				self.attach($e, options);
+				self.attach($e, $options);
 				if ($e.val().length > 0) {
 					self.search_timeout = self.setTimeout(function(){
 						self.search($e, $options);
@@ -17,59 +24,75 @@
 			}).blur(function(){
 				self.hide();
 			}).keydown(function(e){
-				var RETURN = 13;
-				var ESC = 27;
-				var ARRUP = 38;
-				var ARRDN = 40;
 				switch(e.keyCode) {
 					case ARRUP: self.select_prev($e, $options); return false;
 					case ARRDN: self.select_next($e, $options); return false;
 					case ESC: self.clear($e, $options); break;
 					case RETURN: self.activate_selected($options); return false;
-					default:
-						self.clearTimeout();
-						self.search($e, $options);
+					default: self.clearTimeout(); self.search($e, $options);
 				}
+			}).keyup(function(e){
+				if (e.keyCode > SPECIALS_END || e.keyCode == BACKSPACE) {
+					self.clearTimeout();
+					self.search($e, $options);
+				};
 			});
 		});
 	};
 	
 	$.fn.suggest_results.box = null;
+	$.fn.suggest_results.list = null;
 	$.fn.suggest_results.attached_to = null;
 	$.fn.suggest_results.current_results = [];
 	$.fn.suggest_results.selected_result = null;
 	$.fn.suggest_results.timeout = null;
+	$.fn.suggest_results.query_cache = [];
 	
 	$.fn.suggest_results.init = function(options){
 		var self = $.fn.suggest_results;
-		self.box = $("#" + options.template.container_id);
+		self.box = $("#" + options.tpl_container_id);
 		if (self.box.length == 0) {
-			$("body").append(self.mustache(options.template.container, {id: options.template.container_id}));
-			self.box = $("#" + options.template.container_id);
+			$("body").append(self.mustache(options.tpl_container, {id: options.tpl_container_id}));
+			self.box = $("#" + options.tpl_container_id);
+			self.list = $("ol", self.box);
 		};
 	};
 	
 	$.fn.suggest_results.search = function(elm, options){
 		var self = $.fn.suggest_results;
-		var terms = (options.exact_match) ? $.trim(elm.val()) : elm.val().split(/\s/);
+		var terms = (options.exactMatch) ? $.trim(elm.val()) : elm.val().split(/\s/);
 		if (typeof(options.url) === "string" && options.url !== "") {
-			//TODO support fetching results from server-side
+			self.query_for_data(elm, options);
 		} else {
-			var results = self.filter_data(terms, options.data, options);
-		};
-		self.current_results = results;
-		if (results.length > 0) {
-			self.render(results, options);
-			self.show();
-		} else {
-			self.hide();
+			self.current_results = self.filter_data(terms, options.data, options);
+			self.prerender(self.current_results, options);
 		};
 	};
 	
 	$.fn.suggest_results.clear = function(elm, options){
 		var self = $.fn.suggest_results;
 		elm.val("");
-		self.hide();
+		self.hide(0);
+		self.selected_result = null;
+	};
+	
+	$.fn.suggest_results.no_results = function(options){
+		var self = $.fn.suggest_results;
+		if (options.empty) {
+			//TODO display "No Results" label.
+		} else {
+			self.hide(0);
+		};
+	};
+	
+	$.fn.suggest_results.prerender = function(results, options){
+		var self = $.fn.suggest_results;
+		if (results.length > 0) {
+			self.render(results, options);
+			self.show();
+		} else {
+			self.no_results(options);
+		};
 	};
 	
 	$.fn.suggest_results.render = function(results, options){
@@ -77,14 +100,16 @@
 		var results_length = results.length;
 		var html = "";
 		for (var i=0; i < results_length; i++) {
-			var meta = {id: "suggested_result_" + i, "class": ""};
+			var meta = $.extend({}, results[i], {id: "suggested_result_" + i, "class": ""});
 			if (i == 0) { $.extend(meta, {"class": "first"}); };
 			if (i == results_length - 1) { $.extend(meta, {"class": "last"}); };
-			html += self.mustache(options.template.result, $.extend({}, meta, results[i]));
+			html += self.mustache(options.tpl_result_begin, meta);
+			html += self.mustache(options.tpl_result_body, meta);
+			html += self.mustache(options.tpl_result_end, meta);
 		};
-		self.box.html("");
-		self.box.append(html);
-		$(".result", self.box).click(function(){
+		self.list.html("");
+		self.list.append(html);
+		$(".result", self.list).click(function(){
 			self.redirect_to($("a", $(this)).attr("href"));
 		});
 	};
@@ -93,6 +118,7 @@
 		var self = $.fn.suggest_results;
 		var elm_uid = self.elm_uid(elm);
 		if (elm_uid !== self.attached_to) {
+			self.box.hide().attr("class", options.name);
 			var offset = elm.offset();
 			
 			// left offset
@@ -112,7 +138,6 @@
 				width -= parseInt(self.box.css("border-left-width"), 10) + parseInt(self.box.css("border-right-width"), 10);
 				self.box.css("width", width + "px");	
 			};
-			
 			self.attached_to = elm_uid;
 		};
 	};
@@ -121,12 +146,14 @@
 		$.fn.suggest_results.box.show();
 	};
 		
-	$.fn.suggest_results.hide = function(){
+	$.fn.suggest_results.hide = function(delay){
 		var self = $.fn.suggest_results;
+		if (typeof(delay) !== "number") { delay = 250; };
+		self.selected_result = null;
 		self.setTimeout(function(){
 			self.selected_result = null;
 			self.box.hide();
-		}, 500);
+		}, delay);
 	};
 	
 	$.fn.suggest_results.select_next = function(elm, options){
@@ -140,6 +167,10 @@
 				$(".selected", self.box).removeClass("selected");
 				self.selected_result++;
 				$("#suggested_result_" + self.selected_result, self.box).addClass("selected");
+			} else {
+				$(".selected", self.box).removeClass("selected");
+				self.selected_result = null;
+				elm.putCursorAtEnd();
 			};	
 		};
 		return false;
@@ -199,12 +230,44 @@
 		return results;
 	};
 	
+	$.fn.suggest_results.query_for_data = function(elm, options){
+		var self = $.fn.suggest_results;
+		var term = elm.val();
+		var uid = options.url + "?" + term + ":" + options.limit;
+		if (term !== "") {
+			if (self.query_cache.hasOwnProperty(uid)) {
+				self.current_results = self.query_cache[uid];
+				self.prerender(self.current_results, options);
+			} else {
+				var data = { limit: options.limit };
+				data[options.url_query_var] = term;
+				$.ajax({
+					type: options.url_method,
+					url: options.url,
+					data: data,
+					dataType: "json",
+					success: function(response){
+						self.current_results = response.results;
+						self.query_cache[uid] = self.current_results;
+						self.prerender(self.current_results, options);
+					}
+				});
+			};
+		} else {
+			self.no_results(options);
+		};
+		return [];
+	};
+	
 	$.fn.suggest_results.elm_uid = function(elm){
-		var uid = "";
-		if ( elm.attr("id") !== ""    ) { uid += "#" + elm.attr("id");         };
-		if ( elm.attr("class") !== "" ) { uid += "." + elm.attr("class");      };
-		if ( elm.attr("name") !== ""  ) { uid += "[" + elm.attr("name") + "]"; };
-		return uid;
+		if (elm.attr("id") !== "") {
+			return "#" + elm.attr("id");
+		} else if (elm.attr("class") !== "") {
+			return "." + elm.attr("class");
+		} else if (elm.attr("name") !== "") {
+			return "!" + elm.attr("name");
+		};
+		return "";
 	};
 	
 	$.fn.suggest_results.mustache = function(string, data){
@@ -263,16 +326,34 @@
 	};
 	
 	$.fn.suggest_results.defaults = {
-		delay: 150,
+		url: null,
+		url_query_var: "search",
+		url_method: "get",
+		empty: false,
+		empty_label: "No Results",
+		name: "",
+		delay: 100,
 		limit: 6,
 		data: null,
-		exact_match: true,
-		template: {
-			container_id: "suggest_results",
-			container: '<ol id="{{id}}"></ol>',
-			result: '<li class="result {{class}}" id="{{id}}"><a href="{{href}}"><span class="title">{{title}}</span></a></li>',
-			category: '<strong class="category {{class}}">{{category}}</strong>' //TODO add support for categories
-		}
+		exactMatch: true,
+		tpl_container_id: "suggest_results",
+		tpl_container: '<div id="{{id}}"><ol></ol></div>',
+		tpl_result_begin: '<li class="result {{class}}" id="{{id}}"><a href="{{href}}">',
+		tpl_result_body: '<span class="title">{{title}}</span>',
+		tpl_result_end: '</a></li>',
+		tpl_label: '<li class="label {{class}}"{{label}}</li>' //TODO add support for labels/categories
 	};
 	
 })(jQuery);
+
+
+/*
+	Crossbrowser hasOwnProperty solution, based on answers from:
+	http://stackoverflow.com/questions/135448/how-do-i-check-to-see-if-an-object-has-an-attribute-in-javascript
+*/
+if ( !Object.prototype.hasOwnProperty ) {
+	Object.prototype.hasOwnProperty = function(prop) {
+		var proto = obj.__proto__ || obj.constructor.prototype;
+		return (prop in this) && (!(prop in proto) || proto[prop] !== this[prop]);
+	};
+}

@@ -4,11 +4,32 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 /* @end */
 
+body {
+	background: #fff;
+	font: 12px/1.5 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+}
+
+p, dl, hr, h1, h2, h3, h4, h5, h6, ol,
+ul, pre, table, address, fieldset {
+	margin-bottom: 20px;
+}
+
+h1 { font-size: 25px; }
+h2 { font-size: 23px; }
+h3 { font-size: 21px; }
+h4 { font-size: 19px; }
+h5 { font-size: 17px; }
+h6 { font-size: 13px; }
+
 input {
 	border: 1px solid #999;
+	width: 200px;
+	padding: 3px 3px;
+	font-size: 12px;
 }
 
 #container {
 	width: 960px;
 	margin: 0px auto;
+	text-align: center;
 }

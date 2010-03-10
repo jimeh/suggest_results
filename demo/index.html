@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>Suggest Results Demo</title>
+	<link rel="stylesheet" href="demo.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	
+	<script src="../javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../suggest_results/jquery.suggest_results.js" type="text/javascript" charset="utf-8"></script>
+	
+	<link rel="stylesheet" href="../suggest_results/jquery.suggest_results.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	
+	
+	<script src="demo.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function(){
+
+			$("#example1").suggest_results({
+				data: data
+			});
+			
+			$("#example2").suggest_results({
+				url: "server-side.php"
+			});
+			
+			$("#example3").suggest_results({
+				url: "server-side.php",
+				name: "example3",
+				limit: 4,
+				tpl_result_body: '<span class="title">{{title}}</span><span class="info">{{info}}</span>'
+			});
+			
+		});
+	</script>
+	
+	<style type="text/css" media="screen">
+		
+		/* Example 3 */
+		#suggest_results.example3 ol li span.info {
+			color: #888;
+			font-size: 12px;
+		}
+		
+	</style>
+	
+</head>
+
+<body>
+
+<div id="container">
+	<p></p>
+	<h1>Suggest Results Demo</h1>
+	<p>
+		<strong>Results from local array:</strong><br />
+		<input type="text" name="example1" value="" id="example1" />
+	</p>
+	<p>
+		<strong>Results from ajax call:</strong><br />
+		<input type="text" name="example2" value="" id="example2" />
+	</p>
+	<p>
+		<strong>Customized results from ajax call:</strong><br />
+		<input type="text" name="example3" value="" id="example3" />
+	</p>
+</div>
+
+</body>
+</html>
