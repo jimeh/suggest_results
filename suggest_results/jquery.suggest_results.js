@@ -1,5 +1,5 @@
 /*!
- * Suggest Results v0.1.1
+ * Suggest Results v0.1.2
  * http://github.com/jimeh/suggest_results
  *
  * Copyright (c) 2010 Jim Myhrberg.
