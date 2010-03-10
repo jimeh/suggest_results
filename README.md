@@ -32,7 +32,7 @@ In the above example, `userFriends` is a javascript array that would look someth
         {title: "Mike Smith", href: "/user/msmith", match: "msmith mikesmith@gmail.com"}
     ];
 
-This array needs to have two vital attributes, `title` and `href`. When filtering results based on what's been typed in the input field, the `title` and `match` attributes are used. `match` is optional, but `title` is required. `href` is the url to redirect the browser too when the result is selected.
+This array needs to have two vital attributes, `title` and `href`. When filtering results based on what's been typed in the input field, the `title` and `match` attributes are used. `match` is optional, but `title` is required. `href` is the url to redirect the browser to when the result is selected.
 
 The `match` attribute is useful when you need to include extra information like a username or email and get results based on this data without having to display it.
 
@@ -46,20 +46,20 @@ To fetch results via an Ajax call, attach Suggest Results like this to your inpu
 
 As a user starts typing, this will trigger a GET request to `/search_friends/json?limit=6&search=j` if the user has started typing `j`. We'll get to the `limit` option a bit later.
 
-Output from `search_friends_json.php` must be in JSON, and look like this:
+Output from `search_friends_json.php` must be in JSON, and look something like this:
 
     {"results": [
         {"title": "John Doe", "href": "/user/johndoe"},
         {"title": "Mike Smith", "href": "/user/msmith"}
     ]}
 
-Notice how the `match` attribute is not included, as it's not supported for server-side result fetching. No filtering is done in javascript of the results returned, hence `match` is useless. You should do all filtering and order server-side if going ajax-style.
+Notice how the `match` attribute is not included, as it's not supported for server-side result fetching. No filtering is done client-side of the results returned, hence `match` is useless. You should do all filtering and ordering server-side if going ajax-style.
 
-Also, a query cache is used so a specific search term is only requested once per page load. Otherwise new ajax calls would be triggered every for each time a user hits the backspace key to remove a letter.
+Also, a query cache is used so a specific search term is only requested once per page load. Otherwise new ajax calls would be triggered each time a user hits the backspace key to remove a letter for example.
 
 ## Options
 
-There's a number of options you can pass `$.suggest_results`.
+There's a number of options you can pass `$.suggest_results()`.
 
 * **data:** Javascript array with available results.
 * **url:** URL to send ajax request to for results. Either `url` or `data` are required for Suggest Results to work at all.
