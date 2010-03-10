@@ -119,6 +119,11 @@
 		self.list.html(html);
 		$(".result", self.list).click(function(){
 			self.redirect_to($("a", $(this)).attr("href"));
+		}).hover(function(){
+			$(".selected", self.list).removeClass("selected");
+			$(this).addClass("selected");
+		},function(){
+			$(this).removeClass("selected");
 		});
 	};
 	
@@ -169,14 +174,15 @@
 		var limit = self.current_results.length;
 		if (limit > 0) {
 			if (self.selected_result === null) {
+				$(".selected", self.list).removeClass("selected");
 				self.selected_result = 0;
 				$("#suggested_result_" + self.selected_result, self.box).addClass("selected");
 			} else if (self.selected_result + 1 < limit) {
-				$(".selected", self.box).removeClass("selected");
+				$(".selected", self.list).removeClass("selected");
 				self.selected_result++;
 				$("#suggested_result_" + self.selected_result, self.box).addClass("selected");
 			} else {
-				$(".selected", self.box).removeClass("selected");
+				$(".selected", self.list).removeClass("selected");
 				self.selected_result = null;
 				elm.putCursorAtEnd();
 			};	
@@ -189,14 +195,15 @@
 		var limit = self.current_results.length;
 		if (limit > 0) {
 			if (self.selected_result === null) {
+				$(".selected", self.list).removeClass("selected");
 				self.selected_result = limit - 1;
 				$("#suggested_result_" + self.selected_result, self.box).addClass("selected");
 			} else if (self.selected_result > 0) {
-				$(".selected", self.box).removeClass("selected");
+				$(".selected", self.list).removeClass("selected");
 				self.selected_result--;
 				$("#suggested_result_" + self.selected_result, self.box).addClass("selected");
 			} else {
-				$(".selected", self.box).removeClass("selected");
+				$(".selected", self.list).removeClass("selected");
 				self.selected_result = null;
 				elm.putCursorAtEnd();
 			};	
