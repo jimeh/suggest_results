@@ -34,7 +34,7 @@
 }
 
 #suggest_results li.last {
-	border-bottom: none;
+	border-bottom: none !important;
 }
 
 #suggest_results li.result a {

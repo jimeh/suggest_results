@@ -60,7 +60,7 @@
 	
 	$.fn.suggest_results.search = function(elm, options){
 		var self = $.fn.suggest_results;
-		var terms = (options.exactMatch) ? $.trim(elm.val()) : elm.val().split(/\s/);
+		var terms = (options.exact_match) ? $.trim(elm.val()) : elm.val().split(/\s/);
 		if (typeof(options.url) === "string" && options.url !== "") {
 			self.query_for_data(elm, options);
 		} else {
@@ -78,8 +78,8 @@
 	
 	$.fn.suggest_results.no_results = function(elm, options){
 		var self = $.fn.suggest_results;
-		if (options.empty && elm.val() !== "") {
-			var meta = {label: options.empty_label, "class": "last"};
+		if (options.no_results && elm.val() !== "") {
+			var meta = {label: options.no_results_label, "class": "last"};
 			self.list.html(self.mustache(options.tpl_label, meta));
 			self.show();
 		} else {
@@ -327,22 +327,22 @@
 	};
 	
 	$.fn.suggest_results.defaults = {
-		url: null,
-		url_query_var: "search",
-		url_method: "get",
-		empty: true,
-		empty_label: "No Results",
 		name: "",
-		delay: 100,
+		exact_match: true,
 		limit: 6,
+		no_results: true,
+		no_results_label: "No Results",
+		url: null,
+		url_method: "get",
+		url_query_var: "search",
+		delay: 100,
 		data: null,
-		exactMatch: true,
 		tpl_container_id: "suggest_results",
 		tpl_container: '<div id="{{id}}"><ol></ol></div>',
 		tpl_result_begin: '<li class="result {{class}}" id="{{id}}"><a href="{{href}}">',
 		tpl_result_body: '<span class="title">{{title}}</span>',
 		tpl_result_end: '</a></li>',
-		tpl_label: '<li class="label {{class}}">{{label}}</li>' //TODO add support for labels/categories
+		tpl_label: '<li class="label {{class}}">{{label}}</li>'
 	};
 	
 })(jQuery);
