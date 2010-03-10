@@ -1,3 +1,10 @@
+/*!
+ * Suggest Results v0.1.0
+ * http://github.com/jimeh/suggest_results
+ *
+ * Copyright (c) 2010 Jim Myhrberg.
+ * Released under the MIT license.
+ */
 (function($){
 	$.fn.suggest_results = function(options){
 		var self = $.fn.suggest_results;
