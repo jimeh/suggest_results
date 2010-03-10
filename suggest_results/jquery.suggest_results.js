@@ -16,15 +16,14 @@
 				};
 			}).blur(function(){
 				self.hide();
-			}).keyup(function(e){
-				var TAB = 9;
+			}).keydown(function(e){
 				var RETURN = 13;
 				var ESC = 27;
 				var ARRUP = 38;
 				var ARRDN = 40;
 				switch(e.keyCode) {
-					case ARRUP: self.select_prev($options); return false;
-					case ARRDN: self.select_next($options); return false;
+					case ARRUP: self.select_prev($e, $options); return false;
+					case ARRDN: self.select_next($e, $options); return false;
 					case ESC: self.clear($e, $options); break;
 					case RETURN: self.activate_selected($options); return false;
 					default:
@@ -56,9 +55,7 @@
 		if (typeof(options.url) === "string" && options.url !== "") {
 			//TODO support fetching results from server-side
 		} else {
-			console.log(options.data);
 			var results = self.filter_data(terms, options.data, options);
-			console.log(results);
 		};
 		self.current_results = results;
 		if (results.length > 0) {
@@ -132,10 +129,9 @@
 		}, 500);
 	};
 	
-	$.fn.suggest_results.select_next = function(options){
+	$.fn.suggest_results.select_next = function(elm, options){
 		var self = $.fn.suggest_results;
 		var limit = self.current_results.length;
-		console.log(limit);
 		if (limit > 0) {
 			if (self.selected_result === null) {
 				self.selected_result = 0;
@@ -149,10 +145,9 @@
 		return false;
 	};
 	
-	$.fn.suggest_results.select_prev = function(options){
+	$.fn.suggest_results.select_prev = function(elm, options){
 		var self = $.fn.suggest_results;
 		var limit = self.current_results.length;
-		console.log(limit);
 		if (limit > 0) {
 			if (self.selected_result === null) {
 				self.selected_result = limit - 1;
@@ -161,6 +156,10 @@
 				$(".selected", self.box).removeClass("selected");
 				self.selected_result--;
 				$("#suggested_result_" + self.selected_result, self.box).addClass("selected");
+			} else {
+				$(".selected", self.box).removeClass("selected");
+				self.selected_result = null;
+				elm.putCursorAtEnd();
 			};	
 		};
 		return false;
@@ -247,6 +246,20 @@
 			clearTimeout(self.timeout);
 			self.timeout = null;
 		};
+	};
+	
+	// "borrowed" from PutCursorAtEnd plugin: http://plugins.jquery.com/project/PutCursorAtEnd
+	$.fn.putCursorAtEnd = function(){
+		return this.each(function(){
+			$(this).focus();
+			if (this.setSelectionRange) {
+				var len = $(this).val().length * 2;
+				this.setSelectionRange(len, len);
+			} else {
+				$(this).val($(this).val());
+			}
+			this.scrollTop = 999999;
+		});
 	};
 	
 	$.fn.suggest_results.defaults = {
