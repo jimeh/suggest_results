@@ -109,6 +109,7 @@ There are some more options available too for customization, so I recommend you 
 * Better documentation and readme.
 * Handle mouse hovering and keyboard navigation a bit better when used at the same time on a suggest box.
 * Support suggesting search terms in addition to currently only supporting results.
+* Add callbacks for most things.
 
 ## Notice
 
