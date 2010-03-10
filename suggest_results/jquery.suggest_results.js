@@ -32,11 +32,24 @@
 				self.hide();
 			}).keydown(function(e){
 				switch(e.keyCode) {
-					case ARRUP: self.select_prev($e, $options); return false;
-					case ARRDN: self.select_next($e, $options); return false;
-					case ESC: self.clear($e, $options); break;
-					case RETURN: self.activate_selected($options); return false;
-					default: self.clearTimeout(); self.search($e, $options);
+					case ARRUP:
+						self.select_prev($e, $options);
+						return false;
+					case ARRDN:
+						self.select_next($e, $options);
+						return false;
+					case ESC:
+						self.clear($e, $options);
+						break;
+					case RETURN:
+						if (self.selected_result !== null) {
+							self.activate_selected($options);
+							return false;
+						}
+						break;
+					default:
+						self.clearTimeout();
+						self.search($e, $options);
 				}
 			}).keyup(function(e){
 				if (e.keyCode > SPECIALS_END || e.keyCode == BACKSPACE) {
