@@ -65,7 +65,7 @@
 			self.query_for_data(elm, options);
 		} else {
 			self.current_results = self.filter_data(terms, options.data, options);
-			self.prerender(self.current_results, options);
+			self.prerender(elm, self.current_results, options);
 		};
 	};
 	
@@ -76,22 +76,24 @@
 		self.selected_result = null;
 	};
 	
-	$.fn.suggest_results.no_results = function(options){
+	$.fn.suggest_results.no_results = function(elm, options){
 		var self = $.fn.suggest_results;
-		if (options.empty) {
-			//TODO display "No Results" label.
+		if (options.empty && elm.val() !== "") {
+			var meta = {label: options.empty_label, "class": "last"};
+			self.list.html(self.mustache(options.tpl_label, meta));
+			self.show();
 		} else {
 			self.hide(0);
 		};
 	};
 	
-	$.fn.suggest_results.prerender = function(results, options){
+	$.fn.suggest_results.prerender = function(elm, results, options){
 		var self = $.fn.suggest_results;
 		if (results.length > 0) {
 			self.render(results, options);
 			self.show();
 		} else {
-			self.no_results(options);
+			self.no_results(elm, options);
 		};
 	};
 	
@@ -107,8 +109,7 @@
 			html += self.mustache(options.tpl_result_body, meta);
 			html += self.mustache(options.tpl_result_end, meta);
 		};
-		self.list.html("");
-		self.list.append(html);
+		self.list.html(html);
 		$(".result", self.list).click(function(){
 			self.redirect_to($("a", $(this)).attr("href"));
 		});
@@ -237,7 +238,7 @@
 		if (term !== "") {
 			if (self.query_cache.hasOwnProperty(uid)) {
 				self.current_results = self.query_cache[uid];
-				self.prerender(self.current_results, options);
+				self.prerender(elm, self.current_results, options);
 			} else {
 				var data = { limit: options.limit };
 				data[options.url_query_var] = term;
@@ -249,12 +250,12 @@
 					success: function(response){
 						self.current_results = response.results;
 						self.query_cache[uid] = self.current_results;
-						self.prerender(self.current_results, options);
+						self.prerender(elm, self.current_results, options);
 					}
 				});
 			};
 		} else {
-			self.no_results(options);
+			self.no_results(elm, options);
 		};
 		return [];
 	};
@@ -329,7 +330,7 @@
 		url: null,
 		url_query_var: "search",
 		url_method: "get",
-		empty: false,
+		empty: true,
 		empty_label: "No Results",
 		name: "",
 		delay: 100,
@@ -341,7 +342,7 @@
 		tpl_result_begin: '<li class="result {{class}}" id="{{id}}"><a href="{{href}}">',
 		tpl_result_body: '<span class="title">{{title}}</span>',
 		tpl_result_end: '</a></li>',
-		tpl_label: '<li class="label {{class}}"{{label}}</li>' //TODO add support for labels/categories
+		tpl_label: '<li class="label {{class}}">{{label}}</li>' //TODO add support for labels/categories
 	};
 	
 })(jQuery);

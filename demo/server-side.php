@@ -57,27 +57,27 @@
 		"North Yorkshire",  "Nottinghamshire"
 	);
 	
-	$aImg = array(
-		"demo/cast1", "demo/cast2", "demo/cast3", "demo/cast4", "demo/cast5",
-		"demo/cast6", "demo/cast1", "demo/cast2", "demo/cast3", "demo/cast4",
-		"demo/cast5", "demo/cast6", "demo/cast1", "demo/cast2", "demo/cast3",
-		"demo/cast4", "demo/cast5", "demo/cast6", "demo/cast1", "demo/cast2",
-		"demo/cast3", "demo/cast4", "demo/cast5", "demo/cast6", "demo/cast1",
-		"demo/cast2", "demo/cast3", "demo/cast4", "demo/cast5", "demo/cast6",
-		"demo/cast1", "demo/cast2", "demo/cast3", "demo/cast4", "demo/cast5",
-		"demo/cast6", "demo/cast1", "demo/cast2", "demo/cast3", "demo/cast4",
-		"demo/cast5", "demo/cast6", "demo/cast1", "demo/cast2", "demo/cast3",
-		"demo/cast4", "demo/cast5", "demo/cast6", "demo/cast1", "demo/cast2",
-		"demo/cast3", "demo/cast4", "demo/cast5", "demo/cast6", "demo/cast1",
-		"demo/cast2", "demo/cast3", "demo/cast4", "demo/cast5", "demo/cast6",
-		"demo/cast1", "demo/cast2", "demo/cast3", "demo/cast4", "demo/cast5",
-		"demo/cast6", "demo/cast1", "demo/cast2", "demo/cast3", "demo/cast4",
-		"demo/cast5", "demo/cast6", "demo/cast1", "demo/cast2", "demo/cast3",
-		"demo/cast4", "demo/cast5", "demo/cast6", "demo/cast1", "demo/cast2",
-		"demo/cast3", "demo/cast4", "demo/cast5", "demo/cast6", "demo/cast1",
-		"demo/cast2", "demo/cast3", "demo/cast4", "demo/cast5", "demo/cast6",
-		"demo/cast1", "demo/cast2", "demo/cast3", "demo/cast4", "demo/cast5",
-		"demo/cast6", "demo/cast1", "demo/cast2", "demo/cast3",
+	$aHref = array(
+		"/demo/user/1", "/demo/user/2", "/demo/user/3", "/demo/user/4", "/demo/user/5",
+		"/demo/user/6", "/demo/user/1", "/demo/user/2", "/demo/user/3", "/demo/user/4",
+		"/demo/user/5", "/demo/user/6", "/demo/user/1", "/demo/user/2", "/demo/user/3",
+		"/demo/user/4", "/demo/user/5", "/demo/user/6", "/demo/user/1", "/demo/user/2",
+		"/demo/user/3", "/demo/user/4", "/demo/user/5", "/demo/user/6", "/demo/user/1",
+		"/demo/user/2", "/demo/user/3", "/demo/user/4", "/demo/user/5", "/demo/user/6",
+		"/demo/user/1", "/demo/user/2", "/demo/user/3", "/demo/user/4", "/demo/user/5",
+		"/demo/user/6", "/demo/user/1", "/demo/user/2", "/demo/user/3", "/demo/user/4",
+		"/demo/user/5", "/demo/user/6", "/demo/user/1", "/demo/user/2", "/demo/user/3",
+		"/demo/user/4", "/demo/user/5", "/demo/user/6", "/demo/user/1", "/demo/user/2",
+		"/demo/user/3", "/demo/user/4", "/demo/user/5", "/demo/user/6", "/demo/user/1",
+		"/demo/user/2", "/demo/user/3", "/demo/user/4", "/demo/user/5", "/demo/user/6",
+		"/demo/user/1", "/demo/user/2", "/demo/user/3", "/demo/user/4", "/demo/user/5",
+		"/demo/user/6", "/demo/user/1", "/demo/user/2", "/demo/user/3", "/demo/user/4",
+		"/demo/user/5", "/demo/user/6", "/demo/user/1", "/demo/user/2", "/demo/user/3",
+		"/demo/user/4", "/demo/user/5", "/demo/user/6", "/demo/user/1", "/demo/user/2",
+		"/demo/user/3", "/demo/user/4", "/demo/user/5", "/demo/user/6", "/demo/user/1",
+		"/demo/user/2", "/demo/user/3", "/demo/user/4", "/demo/user/5", "/demo/user/6",
+		"/demo/user/1", "/demo/user/2", "/demo/user/3", "/demo/user/4", "/demo/user/5",
+		"/demo/user/6", "/demo/user/1", "/demo/user/2", "/demo/user/3",
 	);
 	
 	
@@ -104,7 +104,7 @@
 					"id"=>($i+1),
 					"title"=>htmlspecialchars($aUsers[$i]),
 					"info"=>htmlspecialchars($aInfo[$i]),
-					"href"=>$aImg[$i],
+					"href"=>$aHref[$i],
 				);
 			}
 			
