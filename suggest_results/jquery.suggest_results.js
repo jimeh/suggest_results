@@ -145,11 +145,12 @@
 			var offset = elm.offset();
 			
 			// left offset
-			self.box.css("left", offset.left + "px");
+			self.box.css("left", (offset.left + options.pos_left));
 			
 			// top offset
 			var top = offset.top + elm.innerHeight();
 			top += parseInt(elm.css("border-top-width"), 10) + parseInt(elm.css("border-bottom-width"), 10);
+			top += options.pos_top;
 			self.box.css("top", top);
 			
 			// width
@@ -359,6 +360,8 @@
 		url: null,
 		url_method: "get",
 		url_query_var: "search",
+		pos_top: 0,
+		pos_left: 0,
 		delay: 100,
 		data: null,
 		tpl_container_id: "suggest_results",
