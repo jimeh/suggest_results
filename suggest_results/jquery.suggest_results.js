@@ -24,7 +24,7 @@
 			$e.focus(function(){
 				self.attach($e, $options);
 				if ($e.val().length > 0) {
-					self.search_timeout = self.setTimeout(function(){
+					self.setTimeout(function(){
 						self.search($e, $options);
 					}, $options.delay);
 				};
@@ -47,9 +47,6 @@
 							return false;
 						}
 						break;
-					default:
-						self.clearTimeout();
-						self.search($e, $options);
 				}
 			}).keyup(function(e){
 				if (e.keyCode > SPECIALS_END || e.keyCode == BACKSPACE) {
@@ -74,7 +71,7 @@
 		if (self.box.length == 0) {
 			$("body").append(self.mustache(options.tpl_container, {id: options.tpl_container_id}));
 			self.box = $("#" + options.tpl_container_id);
-			self.list = $("ol", self.box);
+			self.list = self.box.children("ol");
 		};
 	};
 	
@@ -153,7 +150,7 @@
 			// top offset
 			var top = offset.top + elm.innerHeight();
 			top += parseInt(elm.css("border-top-width"), 10) + parseInt(elm.css("border-bottom-width"), 10);
-			self.box.css("top", top + "px");
+			self.box.css("top", top);
 			
 			// width
 			if (typeof(options.width) === "number" || (typeof(options.width) === "string" && options.width != "")) {
@@ -162,7 +159,7 @@
 				var width = elm.innerWidth();
 				width += parseInt(elm.css("border-left-width"), 10) + parseInt(elm.css("border-right-width"), 10);
 				width -= parseInt(self.box.css("border-left-width"), 10) + parseInt(self.box.css("border-right-width"), 10);
-				self.box.css("width", width + "px");	
+				self.box.css("width", width);
 			};
 			self.attached_to = elm_uid;
 		};
@@ -235,7 +232,8 @@
 		if (typeof(terms) === "string") { terms = [terms]; };
 		var matched = "";
 		var results = [];
-		for (var i = terms.length - 1; i >= 0; i--){
+		var terms_length = terms.length;
+		for (var i=0; i < terms_length; i++) {
 			var term = terms[i];
 			term = term.toLowerCase();
 			if (data !== null && typeof(term) !== "undefined" && term !== "") {
@@ -284,7 +282,6 @@
 		} else {
 			self.no_results(elm, options);
 		};
-		return [];
 	};
 	
 	$.fn.suggest_results.elm_uid = function(elm){
