@@ -77,7 +77,7 @@
 	
 	$.fn.suggest_results.search = function(elm, options){
 		var self = $.fn.suggest_results;
-		var terms = (options.exact_match) ? $.trim(elm.val()) : elm.val().split(/\s/);
+		var terms = (options.exact_match) ? $.trim(elm.val()) : $.trim(elm.val()).split(/\s+/);
 		if (typeof(options.url) === "string" && options.url !== "") {
 			self.query_for_data(elm, options);
 		} else {
