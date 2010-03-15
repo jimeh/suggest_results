@@ -9,7 +9,7 @@
 #suggest_results ol {
 	background: #fbfbfb;
 	border: 1px solid #bbb;
-	border-top: none;
+	border-top-style: none;
 	margin: 0px;
 	padding: 0px;
 	list-style: none;
