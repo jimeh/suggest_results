@@ -128,7 +128,7 @@
 		};
 		self.list.html(html);
 		$(".result", self.list).click(function(){
-			self.redirect_to($("a", $(this)).attr("href"));
+			window.redirect_to($("a", $(this)).attr("href"));
 		}).hover(function(){
 			$(".selected", self.list).removeClass("selected");
 			$(this).addClass("selected");
@@ -225,7 +225,7 @@
 	$.fn.suggest_results.activate_selected = function(options){
 		var self = $.fn.suggest_results;
 		if (self.selected_result !== null) {
-			self.redirect_to(self.current_results[self.selected_result].href);
+			window.redirect_to(self.current_results[self.selected_result].href);
 		};
 	};
 	
@@ -305,24 +305,6 @@
 		return string;
 	};
 	
-	$.fn.suggest_results.redirect_to = function(url, location){
-		if (typeof(location) == "undefined") {
-			location = window.location;
-		};
-		var redirect_to = "";
-		if (url.match(/.+\:\/\/.+/) === null) {
-			redirect_to += location.protocol + "//";
-			redirect_to += location.hostname;
-			if (location.port != "") { redirect_to += ":" + location.port; };
-			if (url.charAt(0) !== "/") {
-				redirect_to += location.pathname.substr(0, location.pathname.lastIndexOf("/")+1);
-			};
-			window.location.href = redirect_to + url;
-		} else {
-			window.location.href = url;
-		};
-	};
-	
 	$.fn.suggest_results.setTimeout = function(callback, delay){
 		var self = $.fn.suggest_results;
 		self.clearTimeout();
@@ -373,6 +355,23 @@
 	};
 	
 })(jQuery);
+
+
+/*
+	redirect_to method from: http://gist.github.com/327227
+*/
+window.redirect_to = function(url, location){
+	var redirect_to = "";
+	if (typeof(location) == "undefined") location = window.location;
+	if (url.match(/^[a-zA-Z]+\:\/\/.+/) === null) {
+		redirect_to += location.protocol + "//" + location.hostname;
+		if (location.port != "") redirect_to += ":" + location.port;
+		if (url.charAt(0) !== "/") redirect_to += location.pathname.substr(0, location.pathname.lastIndexOf("/")+1);
+		window.location.href = redirect_to + url;
+	} else {
+		window.location.href = url;
+	};
+};
 
 
 /*
