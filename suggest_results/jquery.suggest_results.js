@@ -299,7 +299,7 @@
 	$.fn.suggest_results.mustache = function(string, data){
 		if (typeof(string) === "string" && typeof(data) === "object") {
 			for (var key in data) {
-				string = string.replace(new RegExp("{{" + key + "}}", "g"), data[key]);
+				string = string.replace(new RegExp("{{\\s*" + key + "\\s*}}", "g"), data[key]);
 			}
 		};
 		return string;
