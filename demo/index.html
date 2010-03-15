@@ -19,19 +19,26 @@
 		$(document).ready(function(){
 
 			$("#example1").suggest_results({
-				data: data
+				data: exampleData
 			});
 			
 			$("#example2").suggest_results({
-				url: "server-side.php"
+				url: "server-side.php",
 			});
 			
 			$("#example3").suggest_results({
 				url: "server-side.php",
 				name: "example3",
-				empty: false,
+				no_results: false,
 				limit: 4,
-				tpl_result_body: '<span class="title">{{title}}</span><span class="info">{{info}}</span>'
+				tpl_result_body: '<span class="title">{{title}}</span><span class="info">{{ info }}</span>'
+			});
+			
+			$("#example4").suggest_results({
+				data: exampleData,
+				pos_top: 0,
+				pos_left: 20,
+				width: 168
 			});
 			
 		});
@@ -67,6 +74,10 @@
 	<p>
 		<strong>Customized results from ajax call:</strong><br />
 		<input type="text" name="example3" value="" id="example3" />
+	</p>
+	<p>
+		<strong>Customized position with results from local array:</strong><br />
+		<input type="text" name="example4" value="" id="example4" />
 	</p>
 	<p>
 		<a href="http://github.com/jimeh/suggest_results">GitHub Project Page</a>

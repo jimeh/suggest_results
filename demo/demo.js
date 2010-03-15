@@ -1,4 +1,4 @@
-var data = [
+var exampleData = [
 	{"title": "Ädams, Egbert", "info": "Bedfordshire", "href": "/demo/user/1", "match": "zzzz"},
 	{"title": "Altman, Alisha", "info": "Buckinghamshire", "href": "/demo/user/2", "match": "zzzz"},
 	{"title": "Archibald, Janna", "info": "Cambridgeshire", "href": "/demo/user/3", "match": "zzzz"},
